@@ -5,6 +5,7 @@ var server = require('http').Server(app);
 
 var API_ADDR = 'localhost';
 var API_PORT = 3000;
+var hosts = [];
 
 create(server);
 
@@ -17,11 +18,13 @@ app.post('/instances', function(req, res) {
   var host_id = req.body.host_id;
   var cmd = req.body.cmd;
   var sysname = req.body.sysname;
+  var width = req.body.width;
+  var height = req.body.height;
 
   var sock_host = findHost(host_id);
 
   if (sock_host) {
-    runCloudware(sock_host, cmd, sysname);
+    sock_host.socket.emit('run', {sysname: sysname, cmd: cmd, width: width, height: height});
     res.sendStatus(200);
   } else {
     res.sendStatus(500);
@@ -29,16 +32,15 @@ app.post('/instances', function(req, res) {
 });
 app.post('/user', function(req, res) {
   var sysname = req.body.sysname;
-  if (!host[0]) {
+  if (!hosts[0]) {
     res.sendStatus(500);
   } else {
-
-    host[0].socket.emit('createuser', {sysname: sysname});
+    hosts[0].socket.emit('createuser', {sysname: sysname});
+    res.sendStatus(200);
   }
 });
 server.listen(8081);
 
-var hosts = [];
 
 function findHost(id) {
   for (var i in hosts) {
@@ -150,9 +152,6 @@ function create(server) {
   });
 }
 
-function runCloudware(host, cmd, sysname) {
-  host.socket.emit('run', {sysname: sysname, cmd: cmd});
-}
 
 module.exports = {
   create: create,
