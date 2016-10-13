@@ -3,8 +3,8 @@ var bodyParser = require('body-parser');
 var app = require('express')();
 var server = require('http').Server(app);
 
-var API_ADDR = 'localhost';
-var API_PORT = 3000;
+var API_ADDR = 'apiv2.cloudwarehub.com';
+var API_PORT = 80;
 var hosts = [];
 
 create(server);
