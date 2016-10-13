@@ -155,6 +155,5 @@ function create(server) {
 
 module.exports = {
   create: create,
-  findHost: findHost,
-  runCloudware: runCloudware
+  findHost: findHost
 }
