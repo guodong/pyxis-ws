@@ -20,11 +20,12 @@ app.post('/instances', function(req, res) {
   var sysname = req.body.sysname;
   var width = req.body.width;
   var height = req.body.height;
+  var token = req.body.token;
 
   var sock_host = findHost(host_id);
 
   if (sock_host) {
-    sock_host.socket.emit('run', {sysname: sysname, cmd: cmd, width: width, height: height});
+    sock_host.socket.emit('run', {sysname: sysname, cmd: cmd, width: width, height: height, token: token});
     res.sendStatus(200);
   } else {
     res.sendStatus(500);
